@@ -8,7 +8,7 @@ export class InjectEnvCommandLine extends CommandLineParser {
   public constructor() {
     super({
       toolFilename: Cfg.NAME,
-      toolDescription: 'This tool is used to inject environment variables into your react /build folder.',
+      toolDescription: 'This tool is used to inject environment variables into your laravel mix /build folder.',
     })
 
     this.addAction(new BuildAction())

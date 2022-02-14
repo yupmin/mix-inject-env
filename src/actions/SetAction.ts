@@ -1,6 +1,6 @@
 import { CommandLineAction, CommandLineStringParameter } from '@rushstack/ts-command-line'
 import { outputEnvFile } from '../utils/File'
-import { retrieveDotEnvCfg, retrieveReactEnvCfg } from '../utils/Utils'
+import { retrieveDotEnvCfg, retrieveMixEnvCfg } from '../utils/Utils'
 
 export class SetAction extends CommandLineAction {
   private _dir!: CommandLineStringParameter
@@ -30,7 +30,7 @@ export class SetAction extends CommandLineAction {
       parameterLongName: '--dir',
       parameterShortName: '-d',
       argumentName: 'PATH_TO_BUILD_FOLDER',
-      defaultValue: './build',
+      defaultValue: './public/js',
       required: false,
     })
 
@@ -56,13 +56,13 @@ export class SetAction extends CommandLineAction {
   public constructor() {
     super({
       actionName: 'set',
-      summary: 'Set environment variables into your React /build folder.',
+      summary: 'Set environment variables into your Laravel mix /build folder.',
       documentation: 'TODO',
     })
   }
 
   protected async onExecute(): Promise<void> {
-    const envCfg = { ...retrieveDotEnvCfg(), ...retrieveReactEnvCfg() }
+    const envCfg = { ...retrieveDotEnvCfg(), ...retrieveMixEnvCfg() }
     outputEnvFile(this.dir, this.fileName, envCfg, this.varName)
   }
 }

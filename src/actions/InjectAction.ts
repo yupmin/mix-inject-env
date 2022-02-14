@@ -34,7 +34,7 @@ export class InjectAction extends CommandLineAction {
   public constructor() {
     super({
       actionName: 'inject',
-      summary: 'Inject environment variables into your React /build folder.',
+      summary: 'Inject environment variables into your Laravel mix /build folder.',
       documentation: 'TODO'
     })
   }

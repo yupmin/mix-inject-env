@@ -4,7 +4,7 @@ import {
   CommandLineRemainder,
   CommandLineStringListParameter
 } from '@rushstack/ts-command-line'
-import { retrieveDotEnvCfg, retrieveReactEnvCfg } from '../utils/Utils'
+import { retrieveDotEnvCfg, retrieveMixEnvCfg } from '../utils/Utils'
 import shell from 'shelljs'
 import { Obj } from '@aelesia/commons'
 import { parseBoolean, parseCommand } from '../utils/Parse'
@@ -29,14 +29,14 @@ export class BuildAction extends CommandLineAction {
   public constructor() {
     super({
       actionName: 'build',
-      summary: 'Build your react app with placeholder variables',
+      summary: 'Build your laravel-mix app with placeholder variables',
       documentation: 'TODO'
     })
   }
 
   protected async onExecute(): Promise<void> {
     const dotEnvCfg = this.dotEnvEnabled ? retrieveDotEnvCfg() : {}
-    const env = { ...dotEnvCfg, ...retrieveReactEnvCfg() }
+    const env = { ...dotEnvCfg, ...retrieveMixEnvCfg() }
     console.info('Building with the following variables', Obj.pick(env, this.bypassEnvVar))
 
     const filteredEnv = Obj.omit(env, this.bypassEnvVar)
@@ -59,12 +59,12 @@ export class BuildAction extends CommandLineAction {
     this._bypassEnvVar = this.defineStringListParameter({
       parameterLongName: '--bypass',
       description:
-        'react-inject-env will use these environment variables when building and not substitute placeholders',
+        'mix-inject-env will use these environment variables when building and not substitute placeholders',
       argumentName: 'ENV_VARIABLE_NAME'
     })
 
     this._userCommand = this.defineCommandLineRemainder({
-      description: 'Enter your build command here (eg. `react-inject-env build npm run build`)'
+      description: 'Enter your build command here (eg. `mix-inject-env build npm run build`)'
     })
   }
 }

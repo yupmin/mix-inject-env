@@ -1,6 +1,6 @@
 export const Cfg = {
-  NAME: 'react-inject-env',
+  NAME: 'mix-inject-env',
 
-  PREFIX: 'REACT_APP_',
-  PLACEHOLDER_2: 'ReactInjectEnv_'
+  PREFIX: 'MIX_',
+  PLACEHOLDER_2: 'MixInjectEnv_'
 } as const

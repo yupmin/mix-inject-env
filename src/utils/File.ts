@@ -1,7 +1,7 @@
 import replace from 'replace-in-file'
 import shell from 'shelljs'
 import { Cfg } from '../app/Config'
-import { retrieveDotEnvCfg, retrieveReactEnvCfg } from './Utils'
+import { retrieveDotEnvCfg, retrieveMixEnvCfg } from './Utils'
 import { writeFileSync } from 'fs'
 
 function generateFromTo(envCfg: Record<string, string>): {
@@ -39,14 +39,14 @@ export function replaceFile(dirPath: string, envConfig: Record<string, string>) 
 }
 
 export function replaceFilesInDir(dir: string) {
-  const envCfg = { ...retrieveDotEnvCfg(), ...retrieveReactEnvCfg() }
+  const envCfg = { ...retrieveDotEnvCfg(), ...retrieveMixEnvCfg() }
   console.info('Injecting the following environment variables:')
   console.info(envCfg)
   replaceFile(dir, envCfg)
 }
 
 export function outputEnvFile(folder: string, fileName: string, envCfg: Record<string, string>, varName: string) {
-  shell.mkdir('-p', './build')
+  shell.mkdir('-p', './public/js')
   console.info('Setting the following environment variables:')
   console.info(envCfg)
   writeFileSync(`${folder}/${fileName}`, `window.${varName} = ${JSON.stringify(envCfg, null, 2)}`)

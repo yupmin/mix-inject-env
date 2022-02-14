@@ -1,14 +1,14 @@
 import { Cfg } from '../app/Config'
 
-export function retrieveReactEnvCfg(): Record<string, string> {
+export function retrieveMixEnvCfg(): Record<string, string> {
   const env = process.env
   const keys = Object.keys(env)
-  const reactKeys = keys.filter(key => {
+  const mixKeys = keys.filter(key => {
     return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
   })
 
   const envCfg: Record<string, string> = {}
-  for (const key of reactKeys) {
+  for (const key of mixKeys) {
     // @ts-ignore
     envCfg[key] = process.env[key]
   }
@@ -20,12 +20,12 @@ export function retrieveDotEnvCfg(): Record<string, string> {
   const env = require('dotenv').config().parsed ?? {}
 
   const keys = Object.keys(env)
-  const reactKeys = keys.filter(key => {
+  const mixKeys = keys.filter(key => {
     return key.startsWith(Cfg.PREFIX) || key === 'PUBLIC_URL'
   })
 
   const envCfg: Record<string, string> = {}
-  for (const key of reactKeys) {
+  for (const key of mixKeys) {
     // @ts-ignore
     envCfg[key] = process.env[key]
   }
