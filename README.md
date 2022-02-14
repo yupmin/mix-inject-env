@@ -1,4 +1,4 @@
-# react-inject-env
+# [WIP] mix-inject-env
 
 `react-inject-env` is a tool that allows you to inject your environment variables after building the static files, allowing you to deploy the same build to multiple environments quickly.
 
