@@ -1,6 +1,6 @@
 {
   "name": "mix-inject-env",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Tool to inject environment variables into your Mix build",
   "author": "young-jin yun <yupmin@gmail.com>",
   "license": "MIT",
