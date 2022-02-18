@@ -12,7 +12,7 @@ const readFile = (dir: string): string => {
   return shell.cat(dir).toString()
 }
 
-describe('react-inject-env', () => {
+describe('mix-inject-env', () => {
   describe('Build', () => {
     const buildFile = () => {
       const commandLine = new InjectEnvCommandLine()
@@ -22,25 +22,25 @@ describe('react-inject-env', () => {
     }
 
     it('should build file with placeholders from process.env', () => {
-      process.env['REACT_APP_PROCESS_ENV'] = ''
+      process.env['MIX_PROCESS_ENV'] = ''
       const file = buildFile()
-      expect(file).toContain('REACT_APP_PROCESS_ENV: ReactInjectEnv_REACT_APP_PROCESS_ENV')
+      expect(file).toContain('MIX_PROCESS_ENV: MixInjectEnv_MIX_PROCESS_ENV')
     })
     it('should take in PUBLIC_URL env variable', () => {
       process.env['PUBLIC_URL'] = ''
       const file = buildFile()
-      expect(file).toContain('PUBLIC_URL: ReactInjectEnv_PUBLIC_URL')
+      expect(file).toContain('PUBLIC_URL: MixInjectEnv_PUBLIC_URL')
     })
     it('should build file with placeholders from dotenv file', () => {
-      shell.exec('echo REACT_APP_DOT_ENV = DOT_ENV > .env')
+      shell.exec('echo MIX_DOT_ENV = DOT_ENV > .env')
       const file = buildFile()
-      expect(file).toContain('REACT_APP_DOT_ENV: ReactInjectEnv_REACT_APP_DOT_ENV')
+      expect(file).toContain('MIX_DOT_ENV: MixInjectEnv_MIX_DOT_ENV')
     })
     it('should not overwrite variables that are not passed in', () => {
       const file = buildFile()
-      expect(file).toContain('REACT_APP_NO_INPUT: \n')
+      expect(file).toContain('MIX_NO_INPUT: \n')
     })
-    it('should not overwrite variables that do not start with REACT_APP_', () => {
+    it('should not overwrite variables that do not start with MIX_', () => {
       process.env['GENERIC_ENV'] = ''
       const file = buildFile()
       expect(file).toContain('GENERIC_ENV: \n')
@@ -48,21 +48,21 @@ describe('react-inject-env', () => {
 
     // FIXME: Broken Test
     // it('should not read dotenv variables when --dotenv false', () => {
-    //   shell.exec('echo REACT_APP_DOT_ENV = DOT_ENV > .env')
+    //   shell.exec('echo MIX_DOT_ENV = DOT_ENV > .env')
     //
     //   const commandLine = new InjectEnvCommandLine()
     //   commandLine.execute(['build', '--dotenv', 'false', 'sh', 'tests/scripts/buildFile.sh'])
     //   const file = readFile('tests/output/test.txt')
-    //   expect(file).toContain('REACT_APP_DOT_ENV: \n')
+    //   expect(file).toContain('MIX_DOT_ENV: \n')
     // })
 
     it('should build with actual variables when using --bypass', () => {
       const time = new Date().toISOString()
-      process.env['REACT_APP_BYPASS_ENV'] = time
+      process.env['MIX_BYPASS_ENV'] = time
       const commandLine = new InjectEnvCommandLine()
-      commandLine.execute(['build', '--bypass', 'REACT_APP_BYPASS_ENV', 'sh', 'tests/scripts/buildFile.sh'])
+      commandLine.execute(['build', '--bypass', 'MIX_BYPASS_ENV', 'sh', 'tests/scripts/buildFile.sh'])
       const file = readFile('tests/output/test.txt')
-      expect(file).toContain(`REACT_APP_BYPASS_ENV: ${time}`)
+      expect(file).toContain(`MIX_BYPASS_ENV: ${time}`)
     })
   })
 
@@ -73,12 +73,12 @@ describe('react-inject-env', () => {
     }
 
     it('should replace file with injected env variables from process.env', () => {
-      process.env['REACT_APP_INJECT_ENV1'] = 'A'
+      process.env['MIX_INJECT_ENV1'] = 'A'
       buildFile()
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['inject', '-d', 'tests/output'])
       const file = readFile('tests/output/test2.txt')
-      expect(file).toContain('REACT_APP_INJECT_ENV1: A')
+      expect(file).toContain('MIX_INJECT_ENV1: A')
     })
 
     it('should update PUBLIC_URL', () => {
@@ -91,32 +91,32 @@ describe('react-inject-env', () => {
     })
 
     it('should replace file with injected env variables from dotenv', () => {
-      shell.exec('echo REACT_APP_INJECT_ENV2 = B > .env')
+      shell.exec('echo MIX_INJECT_ENV2 = B > .env')
       buildFile()
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['inject', '-d', 'tests/output'])
       const file = readFile('tests/output/test2.txt')
-      expect(file).toContain('REACT_APP_INJECT_ENV2: B')
+      expect(file).toContain('MIX_INJECT_ENV2: B')
     })
 
     it('should replace all files in directory', () => {
-      process.env['REACT_APP_INJECT_ENV3'] = 'C'
+      process.env['MIX_INJECT_ENV3'] = 'C'
       buildFile()
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['inject', '-d', 'tests/output'])
-      expect(readFile('tests/output/test3/test3.txt')).toContain('REACT_APP_INJECT_ENV3: C')
-      expect(readFile('tests/output/test3/test3b.txt')).toContain('REACT_APP_INJECT_ENV3: C')
+      expect(readFile('tests/output/test3/test3.txt')).toContain('MIX_INJECT_ENV3: C')
+      expect(readFile('tests/output/test3/test3b.txt')).toContain('MIX_INJECT_ENV3: C')
     })
 
     it('should output to new folder without modifying the origin when using --o', () => {
-      process.env['REACT_APP_INJECT_ENV4'] = 'D'
+      process.env['MIX_INJECT_ENV4'] = 'D'
       buildFile()
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['inject', '-d', 'tests/output', '-o', 'tests/output2'])
       expect(readFile('tests/output/test4.txt')).toContain(
-        'REACT_APP_INJECT_ENV4: ReactInjectEnv_REACT_APP_INJECT_ENV4'
+        'MIX_INJECT_ENV4: MixInjectEnv_MIX_INJECT_ENV4'
       )
-      expect(readFile('tests/output2/test4.txt')).toContain('REACT_APP_INJECT_ENV4: D')
+      expect(readFile('tests/output2/test4.txt')).toContain('MIX_INJECT_ENV4: D')
     })
   })
 
@@ -132,17 +132,17 @@ describe('react-inject-env', () => {
       expect(()=>readFile('tests/output3/env2.js')).not.toThrowError()
     })
     it('should generate env file based on process.env variables', () => {
-      process.env['REACT_APP_SET_ENV1'] = 'ENV1'
+      process.env['MIX_SET_ENV1'] = 'ENV1'
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env3.js'])
-      expect(readFile('tests/output3/env3.js')).toContain('"REACT_APP_SET_ENV1": "ENV1"')
+      expect(readFile('tests/output3/env3.js')).toContain('"MIX_SET_ENV1": "ENV1"')
     })
     it('should generate env file based on dotenv variables', () => {
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env4.js'])
-      expect(readFile('tests/output3/env4.js')).toContain('"REACT_APP_SET_ENV2": "C"')
+      expect(readFile('tests/output3/env4.js')).toContain('"MIX_SET_ENV2": "C"')
     })
-    it('should not pick up env variables not starting with REACT_APP', () => {
+    it('should not pick up env variables not starting with MIX', () => {
       process.env['SET_GENERIC_ENV'] = 'GENERIC_ENV'
       const commandLine = new InjectEnvCommandLine()
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env5.js'])
