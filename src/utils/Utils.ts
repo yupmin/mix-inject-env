@@ -10,7 +10,10 @@ export function retrieveMixEnvCfg(): Record<string, string> {
   const envCfg: Record<string, string> = {}
   for (const key of mixKeys) {
     // @ts-ignore
-    envCfg[key] = process.env[key]
+    const matched = process.env[key].match(/^\$\{([A-Z0-9_]*)\}/)
+
+    // @ts-ignore
+    envCfg[key] = !matched ? process.env[key] : process.env[matched[1]]
   }
   return envCfg
 }

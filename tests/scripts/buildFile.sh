@@ -1,3 +1,5 @@
+cp .env.test .env
+
 rm -r tests/output
 mkdir -p tests/output
 

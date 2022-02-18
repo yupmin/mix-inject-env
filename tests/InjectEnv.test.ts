@@ -142,6 +142,11 @@ describe('mix-inject-env', () => {
       commandLine.execute(['set', '-d', './tests/output3', '-n', 'env4.js'])
       expect(readFile('tests/output3/env4.js')).toContain('"MIX_SET_ENV2": "C"')
     })
+    it('should replace env variable to other env variable', () => {
+      const commandLine = new InjectEnvCommandLine()
+      commandLine.execute(['set', '-d', './tests/output3', '-n', 'env7.js'])
+      expect(readFile('tests/output3/env7.js')).toContain('"MIX_SET_ENV3": "C"')
+    })
     it('should not pick up env variables not starting with MIX', () => {
       process.env['SET_GENERIC_ENV'] = 'GENERIC_ENV'
       const commandLine = new InjectEnvCommandLine()

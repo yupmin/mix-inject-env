@@ -13,3 +13,4 @@ tests/output*
 !tests/output3
 tests/output3/**.js
 .DS_Store
+.env
